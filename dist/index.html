@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+
+
+  <!-- マイクロモーダルのCSS 【MITライセンス】-->
+  <!-- https://github.com/ghosh/Micromodal -->
+  <link rel="stylesheet" href="./micromodal.css">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <h1>CSV・TSVファイルの簡易分析ツール(danfo.jsのテスト)</h1>
+  
+  <h3>・クライアントサイド(ブラウザ上)でデータ分析が可能な「
+    <a href="https://www.npmjs.com/package/danfojs/v/1.1.2" target="_blank" rel="noopener noreferrer">danfojs@1.1.2</a>
+    」パッケージのテスト　→
+    <a href="https://zenn.dev/aidemy/articles/c41150aa4bf4c9" target="_blank" rel="noopener noreferrer">他の人による紹介</a>
+    
+  </h3>
+
+
+  <div class="file-load-panel">
+
+    <fieldset>
+      <legend><b>[0]：読み込めたファイルの例</b></legend>
+      <div>MBのファイルなら多分読み込めます</div>
+      <div>・<a href="https://atmarkit.itmedia.co.jp/ait/articles/2007/02/news016.html" target="_blank" rel="noopener noreferrer">titanicのcsv(44KB)</a>：成功</div>
+      <div>・<a href="https://catalog.data.gov/dataset/electric-vehicle-population-data" target="_blank" rel="noopener noreferrer">電気自動車のcsv(4MB)</a>：成功</div>
+      <div>・<a href="https://catalog.data.gov/dataset/alzheimers-disease-and-healthy-aging-data" target="_blank" rel="noopener noreferrer">認知症患者のcsv(10MB)</a>：成功</div>
+      <div>・実験csv(4GB)：30分経過でも処理中</div>
+    </fieldset>
+
+    <fieldset>
+      <legend><b>[1]：ファイルを選択</b></legend>
+      <div>形式はCSV・TSV</div>
+      <div><button class="btn-input-file" id="input_csv_tsv_button">ファイルを選択</button></div>
+      <div>　</div>
+      <div id="input-file-name">読込中：選択されていません</div>
+      <input type="file" id="input_csv_tsv_file">
+    </fieldset>
+    
+    <fieldset>
+      <legend><b>[2]：読み込み設定を入力</b></legend>
+      <div>ファイルを読み込む際の設定</div>
+      <button class="btn-config" id="inputfile_setting_button">設定画面</button>
+    </fieldset>
+    
+    <fieldset>
+      <legend><b>[3]：ファイルを読み込む</b></legend>
+      <button class="btn-config" id="preview_analysis_button">読み込む！</button>
+      <div>　</div>
+      <div id="file_load_status">読み込み状況：</div>
+    </fieldset>
+
+  </div>
+
+  <fieldset>
+    <legend><b>[4]：読み込んだファイルをdanfo.jsの機能で分析する(ファイル読み込み後に操作可能)</b></legend>
+    <div class="data-analytics-console">
+      
+      <div class="data-analytics-console-explain">
+        <div>
+          <label><b>
+          ★<a
+                href="https://developer.mozilla.org/ja/docs/Learn/Common_questions/Tools_and_setup/What_are_browser_developer_tools" target="_blank" rel="noopener noreferrer">開発者ツールのコンソール(F12で開ける)
+              </a>から読み込んだファイルを操作
+          </b></label>
+        </div>
+        <ul>
+          <li>グローバル変数の「<code>dfd</code>」に、danfo.jsの機能(<a href="https://danfo.jsdata.org/api-reference/input-output"  target="_blank" rel="noopener noreferrer">入出力</a>・<a href="https://danfo.jsdata.org/api-reference/general-functions"  target="_blank" rel="noopener noreferrer">基本操作</a>)が入っています。</li>
+          <li>グローバル変数の「<code>df</code>」に、読み込んだファイルが<a href="https://danfo.jsdata.org/api-reference/dataframe"  target="_blank" rel="noopener noreferrer">DataFrame型のオブジェクト</a>として入っています。</li>
+          <li>Pythonのデータ解析ライブラリ<a href="https://pandas.pydata.org/docs/user_guide/index.html" target="_blank" rel="noopener noreferrer">「pandas」</a> と同じような構文でデータ分析の操作が可能です。</li>
+        </ul>
+      </div>
+      
+      <button class="btn-command" id="recommend_command_button">danfo.jsの機能<br>の簡易的説明集</button>
+    </div>
+  </fieldset>
+
+  
+  <fieldset id="data-analytics-field" disabled>
+    <legend><b>[5]：読み込んだファイルのちょっとした分析(ファイル読み込み後に操作可能)</b></legend>
+  
+    
+      <div>
+        <div class="data-analytics-columns">
+          <div>
+            <label><b>★読み込んだデータのcolumns</b>：</label>
+            <a
+              href="https://stackoverflow.com/questions/68112232/how-can-i-obtain-the-column-values-of-a-dataframe-in-danfojs" target="_blank" rel="noopener noreferrer">values</a>から取得(何故か公式ドキュメントに未記載の関数)
+          </div>
+          <textarea readonly wrap="off"readonly id="preview_data_columns"></textarea>
+        </div>
+  
+      </div>
+  
+  
+      <div class="data-analytics-panel">
+  
+        <div class="data-analytics-panel-box-allcolumn">
+          <div><label><b>★各カラムのデータ型・ユニークな要素な個数</b></label></div>
+          <div>　※データフレームの
+            <a href="https://danfo.jsdata.org/api-reference/dataframe/dataframe.dtypes" target="_blank" rel="noopener noreferrer">ctypes</a>と
+            <a href="https://danfo.jsdata.org/api-reference/dataframe/dataframe.nunique-1" target="_blank" rel="noopener noreferrer">nUnique(0)</a>
+            から取得
+          </div>
+          <textarea readonly wrap="off" id="preview_data_allcolumns_count">読み込むとここに表示</textarea>
+        </div>
+  
+        <div class="data-analytics-panel-box-onecolumn">
+          <div><label><b>★特定カラムのユニークな要素の出現回数(重いので注意)</b></label></div>
+          <div>　※特定カラムをSeriesに変換後、
+            <s><a href="https://danfo.jsdata.org/api-reference/series/series.value_counts" target="_blank" rel="noopener noreferrer">valueCounts()</a>で取得</s>
+            エラー出たので自力で実装
+          </div>
+          <div>
+            <select id="preview_data_select_column">
+              <option value="none">ここから選択</option>
+            </select>
+          </div>
+          <textarea readonly wrap="off" id="preview_data_one_columns_count">セレクトで選択すると表示</textarea>
+        </div>
+      </div>
+    
+  </fieldset>
+  
+
+
+
+  <!-- 読み込み設定画面のモーダルウィンドウ -->
+  <div class="modal micromodal-slide" id="manual-help-window" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+        <header class="modal__header">
+          <h2 class="modal__title" id="modal-1-title">
+            ファイルの読み込み設定
+          </h2>
+          <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+        </header>
+
+        <main class="modal__content" id="modal-1-content">
+          <div class="option-window">
+
+              <fieldset>
+                <legend><b>区切り文字を選択</b></legend>
+                <div><label><input type="radio" name="opp_delimiter" value="" checked />自動判定</label></div>
+                <div><label><input type="radio" name="opp_delimiter" value="," />カンマ文字(,)</label></div>
+                <div><label><input type="radio" name="opp_delimiter" value="\t" />タブ文字(\t)</label></div>
+                <div><label><input type="radio" name="opp_delimiter" value="others"/>その他(下に入力)</label></div>
+                <input type="text" id="opp_delimiter_others">
+              </fieldset>
+              
+
+              <fieldset>
+                <legend><b>クォート文字を選択</b></legend>
+                <div><label><input type="radio" name="opp_quote" value='"' checked />ダブルクォート(")</label></div>
+                <div><label><input type="radio" name="opp_quote" value="others"/>その他(下に入力)</label></div>
+                <input type="text" id="opp_quote_others">
+              </fieldset>
+            
+              <fieldset>
+                <legend><b>エスケープ文字を選択</b></legend>
+                <div><label><input type="radio" name="opp_escape" value='"' checked />ダブルクォート(")</label></div>
+                <div><label><input type="radio" name="opp_escape" value="others"/>その他(入力)</label></div>
+                <input type="text" id="opp_escape_others">
+              </fieldset>
+
+              
+
+              <fieldset>
+                <legend><b>改行シーケンスを選択</b></legend>
+                <div><label><input type="radio" name="opp_newline" value="" checked />自動判定</label></div>
+                <div><label><input type="radio" name="opp_newline" value="\n" />\n</label></div>
+                <div><label><input type="radio" name="opp_newline" value="\r" />\r</label></div>
+                <div><label><input type="radio" name="opp_newline" value="\r\n" />\r\n</label></div>
+              </fieldset>
+
+              <fieldset>
+                <legend><b>ファイルのエンコード</b></legend>
+                <div><label><input type="radio" name="opp_encoding" value="utf-8" checked />UTF-8</label></div>
+                <div><label><input type="radio" name="opp_encoding" value="SJIS" />Shift_JIS</label></div>
+              </fieldset>
+
+              <fieldset>
+                <legend><b>コメントを示す文字列</b></legend>
+                <div><label><input type="radio" name="opp_comment" value="false" checked />無し</label></div>
+                <div><label><input type="radio" name="opp_comment" value="#" checked />#</label></div>
+                <div><label><input type="radio" name="opp_comment" value="//" />//</label></div>
+                <!-- <div><label><input type="radio" name="opp_comment" value="others"/>その他(入力)</label></div>
+                <input type="text" id="opp_comment_others"> -->
+              </fieldset>
+
+              <fieldset>
+                <legend><b>最初の行はヘッダー?</b></legend>
+                <div><label><input type="radio" name="opp_header" value="true" checked />true</label></div>
+                <div><label><input type="radio" name="opp_header" value="false" />false</label></div>
+              </fieldset>
+
+              <fieldset>
+                <legend><b>カラムの名称を指定</b></legend>
+                <div><span>「,」で区切り順番に入力</span></div>
+                <div><span>数がおかしい場合はエラー</span></div>
+                <input type="text" id="opp_columns">
+              </fieldset>
+            
+          </div>
+        </main>
+
+        <footer class="modal__footer">
+          <button class="modal__btn modal__btn-primary" data-micromodal-close aria-label="Close this dialog window">Close</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- おすすめコマンド一覧のモーダルウィンドウ -->
+  <div class="modal micromodal-slide" id="recommend_command_window" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+        <header class="modal__header">
+          <h2 class="modal__title" id="modal-1-title">
+            danfo.jsの機能の簡易的説明集(コンソールでのお試しに使える)
+          </h2>
+          <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+        </header>
+  
+        <main class="modal__content" id="modal-1-content">
+        
+          <div class="command-window">
+
+            <div><b>　◎読み込んだ時点で先頭10行を表示する「<code>df.print();</code>」が実行されています。</b></div>
+            <ul>
+              <li>関数で加工したデータの表示にもprint();を使用するけど、初期状態では10行までしか表示できません。</li>
+              <li>何故か
+                <a
+                  href="https://danfo.jsdata.org/api-reference/configuration-options#configure-the-number-of-rows-displayed-when-print-is-called" target="_blank" rel="noopener noreferrer">公式ドキュメント</a>
+                に記載が無いけど、以下のコマンドで表示する行数を変更することができます。
+              </li>
+              <li>printの表示行数を20行に変更：<code>df.config.setMaxRow(20);</code></li>
+            </ul>
+            
+            <div><b>　◎
+              <a href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.head" target="_blank" rel="noopener noreferrer">head()</a>
+              と
+              <a href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.tail" target="_blank" rel="noopener noreferrer">tail()</a>
+              を表示する場合も、↑のprintの表示行数設定の変更が必要です。
+            </b></div>
+            <ul>
+              <li>先頭から20件表示する場合：<code>df.config.setMaxRow(20); </code><code> df.head(20).print();</code></li>
+              <li>末尾から30件表示する場合：<code>df.config.setMaxRow(30); </code><code> df.tail(30).print();</code></li>
+            </ul>
+
+
+            <div><b>　◎データセットの基本的な統計情報を計算することができます(オススメ)。</b></div>
+            <ul>
+              <li>
+                <a
+                  href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.sum" target="_blank" rel="noopener noreferrer">各カラムの合計値</a>：<code>df.sum({axis: 0}).print();</code>
+              </li>
+              <li><a
+                  href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.describe" target="_blank" rel="noopener noreferrer">各カラムの要素数、平均、標準偏差、最小値、中央値、最大値、分散を表示</a>：<code>df.describe().print();</code>
+              </li>
+              
+            </ul>
+
+            <div><b>　◎
+              <a href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.cumsum" target="_blank" rel="noopener noreferrer">累積和</a>と
+              <a href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.cumprod" target="_blank" rel="noopener noreferrer">累積積</a>と
+              <a href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.cummax" target="_blank" rel="noopener noreferrer">累積最大値</a>と
+              <a href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.cummin" target="_blank" rel="noopener noreferrer">累積最小値</a>は、
+              カラムに「string」型のデータがあるとエラーになる。
+            </b></div>
+            <ul>
+              <li>「string」が入っていないカラムを指定して、累積和を計算する場合は以下の通りです。</li>
+              <li>末尾から10件の累積和を表示：<code>df["stringではない型のカラム"].cumSum().tail(10).print();</code></li>
+            </ul>
+
+            <div><b>　◎特定のカラムの要素で
+              <a href="https://danfo.jsdata.org/api-reference/dataframe/danfo.dataframe.groupby" target="_blank" rel="noopener noreferrer">グループ化</a>
+              した後に、色々な処理を行うことができます。
+            </b></div>
+            <ul>             
+              <li>
+                  カラムAの要素でグループ化した後に、各グループのカラムBの要素の数をカウントする
+              </li>
+              <div>：<code>df.groupby(["カラムA"].col(["カラムB"])).count().print();</code></div>
+            </ul>
+
+            <div><b>　◎
+              <a href="https://danfo.jsdata.org/api-reference/dataframe/dataframe.nunique-1" target="_blank" rel="noopener noreferrer">各カラムのユニークな要素の個数(要素の種類の数)</a>
+              を取得できます。
+            </b></div>
+            
+            <ul>
+              <li><code>df.nUnique(axis=0).print();</code></li>
+            </ul>
+
+            <div><b>　◎
+              <a href="https://danfo.jsdata.org/api-reference/series/series.value_counts" target="_blank" rel="noopener noreferrer">特定のカラムのユニークな各要素の出現頻度(要素の種類毎の個数)</a>
+              を取得できます。
+            </b></div>
+            <ul>
+              <li><code>df["要素の出現頻度を出すカラム"].valueCounts().print();</code></li>
+              <li><code>IndexError: Row index must contain unique values</code>というエラーが出る時がある(対処法探し中)。</li>
+            </ul>
+            <div><b>　◎
+              <a href="https://danfo.jsdata.org/api-reference/input-output" target="_blank" rel="noopener noreferrer">読み込んだファイルを別の形式に変換して保存</a>
+              することができます(変換器としても利用可能)。
+            </b></div>
+            
+            <ul>
+              <li>JSONで保存：<code id="json_save_cmd">dfd.toJSON(df, { fileName: "ファイル名.json", download: true });</code></li>
+              <li>Excelで保存：<code id="xlsx_save_cmd">dfd.toExcel(df, { fileName: "ファイル名.xlsx"});</code></li>
+              <li>CSVで保存：<code id="csv_save_cmd">df.toCSV({ fileName: "ファイル名.csv", download: true});</code></li>
+              <li>TSVで保存：<code id="tsv_save_cmd">df.toCSV({ fileName: "ファイル名.tsv", download: true, sep: "\t"});</code></li>
+            </ul>
+          </div>
+
+        </main>
+  
+        <footer class="modal__footer">
+          <button class="modal__btn modal__btn-primary" data-micromodal-close
+            aria-label="Close this dialog window">Close</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    let dfd;
+    let df;
+  </script>
+  <script src="main.js"></script>
+</body>
+</html>

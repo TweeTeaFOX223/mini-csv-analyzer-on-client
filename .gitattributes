@@ -1,0 +1,3 @@
+# バンドル化したJavaScriptファイルを
+# GitHubの統計のやつから除外して言語比を正常にする
+dist/main.js linguist-vendored

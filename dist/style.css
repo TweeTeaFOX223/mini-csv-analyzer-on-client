@@ -1,0 +1,179 @@
+
+h1 {
+  white-space: nowrap;
+}
+
+/* リスト間の隙間を減らす */
+ul{
+  margin-top: 0;
+}
+
+code{
+  background-color: #f8f8f8;
+}
+
+/* 幅を子要素のサイズにフィットするように */
+fieldset{
+  margin: 12px;
+  width: fit-content;
+}
+
+/* ファイルの選択をするボタン */
+.btn-input-file{
+    width: 180px;
+    height: 45px;
+    line-height: 5px;
+    display: block;
+    background: #04ADFF;
+    text-align: center;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+/* inputのファイルの本体(非表示にしてボタンでクリックする) */
+#input_csv_tsv_file{
+  display:none;
+}
+
+/* 設定に関するボタンの基本スタイル */
+.btn-config {
+  width: 210px;
+  height: 60px;
+  line-height: 5px;
+  display: block;
+  background: #04ADFF;
+  text-align: center;
+  color: #FFFFFF;
+  font-size: 30px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* 無効化中の設定に関するボタン(ファイル読込中に使用する) */
+.btn-config-inactive {
+  width: 210px;
+  height: 60px;
+  line-height: 60px;
+  display: block;
+  background: #c0c0c0;
+  text-align: center;
+  color: #FFFFFF;
+  font-size: 30px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* danfojsのコマンド説明のモーダルを表示するボタン */
+.btn-command {
+  margin: 0px 12px 6px;
+  width: 300px;
+  height: 120px;
+  display: block;
+  background: #04ADFF;
+  color: #FFFFFF;
+  font-size: 30px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* ボタンをカーソルでホバーした時の処理 */
+.btn-config:hover,
+.btn-input-file:hover,
+.btn-command:hover {
+  background: #0099FF;
+  color: #FFFC00;
+}
+
+
+/* ファイル読み込みの部分全体 */
+.file-load-panel{
+  display:flex;
+  flex-wrap: nowrap;
+}
+
+/* ファイル読み込み部分にあるフィールド */
+.file-load-panel  fieldset{
+  white-space: nowrap;
+}
+
+/* ファイルの読み込み設定をするモーダルウィンドウのスタイル */
+.option-window{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px 20px;
+  white-space: nowrap;
+}
+
+/* 色々な設定や説明に関するパネスの共通スタイル */
+.command-window,
+.data-analytics-columns, 
+.data-analytics-panel-box-allcolumn, 
+.data-analytics-panel-box-onecolumn{
+  background-color: #ecf1d7;
+  padding: 12px;
+  white-space: nowrap;
+}
+
+/* 開発者ツールでdanfojsを試す方法の説明部分 */
+.data-analytics-console{
+  width: 1100px;
+  height: 120px;
+  display:flex;
+}
+
+/* ↑の文章の部分のスタイル */
+.data-analytics-console-explain{
+  background-color: #ecf1d7;
+  padding: 12px;
+  white-space: nowrap;
+}
+
+/* danfojsのコマンドの説明のモーダルウィンドウのスタイル */
+.command-window > *{
+  white-space: nowrap;
+}
+
+/* データの分析プレビュー部分のスタイル */
+#data-analytics-field{
+  margin-top: 24px;
+}
+
+/* 読み込んだファイルのカラム一覧を表示する部分 */
+.data-analytics-columns {
+  display: inline-block;
+  margin-top: 18px;
+}
+
+/* 読み込んだファイルのカラム一覧を表示する部分のtextarea */
+.data-analytics-columns textarea{
+
+  resize: horizontal;
+  height:32px;
+  width: 1050px;
+}
+
+/* 読み込んだファイルのプレビューする部分の後半 */
+.data-analytics-panel{
+  margin-top: 18px;
+  display:flex;
+}
+
+/* プレビューする部分の後半のdivの間隔 */
+.data-analytics-panel> div + div {
+  margin-left: 30px;
+}
+
+/* データの型とユニークな要素の数を表示するtextarea */
+.data-analytics-panel-box-allcolumn textarea {
+  width: 390px;
+  height: 175px;
+}
+
+/* ユニークな各要素の個数を表示するtextarea */
+.data-analytics-panel-box-onecolumn textarea{
+  width: 615px;
+  height: 150px;
+}
+
