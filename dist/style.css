@@ -1,5 +1,5 @@
 
-h1 {
+h1,h3 {
   white-space: nowrap;
 }
 
@@ -116,6 +116,7 @@ fieldset{
   white-space: nowrap;
 }
 
+
 /* 開発者ツールでdanfojsを試す方法の説明部分 */
 .data-analytics-console{
   width: 1100px;
@@ -131,6 +132,10 @@ fieldset{
 }
 
 /* danfojsのコマンドの説明のモーダルウィンドウのスタイル */
+.command-window{
+  width:800px;
+}
+
 .command-window > *{
   white-space: nowrap;
 }

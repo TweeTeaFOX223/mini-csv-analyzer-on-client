@@ -20,7 +20,9 @@ inputFileManager.addEventListener("change", function () {
   inputFileNameText.innerText = `読込中：${inputFileManager.files[0].name}`;
 });
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("テスト");
+  if (inputFileManager.files[0] === undefined) {
+    return;
+  }
   if (inputFileManager.files[0].value !== "") {
     inputFileNameText.innerText = `読込中：${inputFileManager.files[0].name}`;
   }
