@@ -40,17 +40,17 @@ CSVかTSVのファイルを読み込み、簡易的なデータ分析を行う�
 
 ## オンライン：GitHub Pagesで使用
 <b>npmとWebpackを使ってビルドしたものがGitHub Pagesにあります！</b>  
-https: 
-<br>
+https://tweeteafox223.github.io/mini-csv-analyzer-on-client/  
+<br>  
 
 ## ローカル・オフライン：distディレクトリをDLして使用
 このリポジトリの`./dist`をダウンロードし、  
-ブラウザでindex.htmlを開くことで使用可能です。  
+ブラウザで`index.html`を開くことで使用可能です。  
 ローカルかつオフライン環境でも動作可能です。  
 
 下記のリンクに入り、右上の「・・・」→「Download」を押す、  
 又は、中央付近にある「↓」のボタンを押すとダウンロードできます。  
-https://
+https://github.com/TweeTeaFOX223/mini-csv-analyzer-on-client/tree/main/dist  
 <br>
 
 # このアプリを改変・ビルドする方法
