@@ -75,7 +75,8 @@ npm run dev-server
 ```
 npm run build
 ```  
-<br>
+<br>  
+
 # 作成する上で困難だったポイント
 
 ## 「danfojs」の依存パッケージ「xlsx」の脆弱性を手動で修正
